@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alcove – Digital Art Gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ECEDEA;--surface:#F7F7F5;--ink:#17191F;--sub:#555A66;--line:#CFD1CC;--accent:#2B3FD6;--accent-ink:#fff;--shadow:0 18px 40px -18px rgba(23,25,31,.35);
+--serif:"Newsreader",Georgia,serif;--sans:"DM Sans",system-ui,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161B;--surface:#1D2026;--ink:#ECEDF0;--sub:#9DA3B0;--line:#2E323B;--accent:#8E9CFF;--accent-ink:#10122B;--shadow:0 18px 40px -18px #000}}
+:root[data-theme="dark"]{--bg:#14161B;--surface:#1D2026;--ink:#ECEDF0;--sub:#9DA3B0;--line:#2E323B;--accent:#8E9CFF;--accent-ink:#10122B;--shadow:0 18px 40px -18px #000}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--sans)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,48px)}
+header{border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
+.brand{font:500 28px/1 var(--serif);text-decoration:none;letter-spacing:-.02em}
+nav{display:flex;gap:6px}
+nav a{padding:8px 16px;border-radius:99px;text-decoration:none;font-weight:500;color:var(--sub)}
+nav a[aria-current]{background:var(--ink);color:var(--bg)}
+nav a:hover:not([aria-current]){color:var(--ink)}
+h1,h2{font-family:var(--serif);font-weight:400;letter-spacing:-.025em;margin:0}
+.intro{display:flex;justify-content:space-between;align-items:end;gap:24px;padding:56px 0 32px;flex-wrap:wrap}
+.intro h1{font-size:clamp(40px,6vw,76px);line-height:1}
+.intro p{margin:0;max-width:34ch;color:var(--sub)}
+/* gallery */
+.grid{columns:3;column-gap:28px;padding-bottom:80px}
+@media(max-width:900px){.grid{columns:2;column-gap:20px}}
+@media(max-width:540px){.grid{columns:1}}
+.card{display:block;position:relative;break-inside:avoid;margin:0 0 28px;text-decoration:none;overflow:hidden;border-radius:4px;box-shadow:var(--shadow);transition:opacity .3s}
+.card svg{display:block;width:100%;height:auto;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.card .cap{position:absolute;inset:auto 0 0 0;padding:44px 18px 16px;color:#fff;background:linear-gradient(transparent,rgba(10,12,20,.82));transform:translateY(101%);transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.cap b{display:block;font:500 22px/1.2 var(--serif)}
+.cap span{font-size:14px;opacity:.85}
+@media(hover:hover){
+.grid:has(.card:hover) .card:not(:hover){opacity:.4}
+.card:hover svg,.card:focus-visible svg{transform:scale(1.06)}
+.card:hover .cap,.card:focus-visible .cap{transform:none}}
+@media(hover:none){.card .cap{transform:none;position:static;background:var(--surface);color:var(--ink);padding:12px 16px}}
+/* detail */
+.crumb{padding:28px 0 20px;display:flex;justify-content:space-between;font-size:15px}
+.crumb a{color:var(--sub);text-decoration:none;font-weight:500}.crumb a:hover{color:var(--ink)}
+.detail{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(32px,6vw,88px);align-items:start;padding-bottom:88px}
+@media(max-width:900px){.detail{grid-template-columns:1fr}}
+.mat{background:var(--surface);padding:clamp(18px,4vw,48px);box-shadow:var(--shadow);border-radius:4px;display:flex;justify-content:center}
+.mat svg{display:block;max-height:78vh;width:auto;max-width:100%;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.info{position:sticky;top:24px}
+@media(max-width:900px){.info{position:static}}
+.info h1{font-size:clamp(38px,5vw,60px);line-height:1.02}
+.by{font-size:19px;color:var(--sub);margin:10px 0 28px}
+.info p{max-width:52ch}
+dl{display:grid;grid-template-columns:auto 1fr;gap:10px 28px;margin:28px 0;padding:20px 0;border-block:1px solid var(--line)}
+dt{color:var(--sub)}dd{margin:0;font-weight:500}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{font:600 16px var(--sans);padding:13px 24px;border-radius:99px;border:1.5px solid var(--ink);background:none;color:var(--ink);text-decoration:none;cursor:pointer;display:inline-block}
+.btn.p{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:hover{filter:brightness(1.1)}
+/* form */
+.formgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:clamp(32px,6vw,88px);padding:56px 0 96px}
+@media(max-width:900px){.formgrid{grid-template-columns:1fr}}
+.formgrid h1{font-size:clamp(38px,5vw,64px);line-height:1.02;margin-bottom:18px}
+.formgrid>div>p{color:var(--sub);max-width:36ch}
+form{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.f{display:flex;flex-direction:column;gap:6px}.f.w{grid-column:1/-1}
+@media(max-width:540px){form{grid-template-columns:1fr}}
+label{font-weight:500;font-size:15px}
+input,select,textarea{font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);width:100%}
+input:hover,select:hover,textarea:hover{border-color:var(--sub)}
+textarea{min-height:120px;resize:vertical}
+.hint{font-size:13.5px;color:var(--sub)}
+.err{font-size:13.5px;color:#C2362B;min-height:0}
+@media(prefers-color-scheme:dark){.err{color:#FF8C80}}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:32px 16px;text-align:center;color:var(--sub);cursor:pointer;background:var(--surface)}
+.drop:hover,.drop.on{border-color:var(--accent);color:var(--ink)}
+.drop input{display:none}
+.ok{grid-column:1/-1;padding:48px 24px;background:var(--surface);border-radius:12px;text-align:center}
+.ok h2{font-size:36px;margin-bottom:8px}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--sub);font-size:14px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="#gallery">Alcove</a>
+<nav aria-label="Main"><a href="#gallery" id="n-g">Gallery</a><a href="#submit" id="n-s">Submit artwork</a></nav></div></header>
+<main id="app" tabindex="-1"></main>
+<footer><div class="wrap">Alcove is a fictional gallery made for a UI/UX design exercise. All artworks are generated shapes.</div></footer>
+<script>
+const A=[
+{id:'dusk-field',t:'Dusk Field',a:'Mira Okafor',y:2023,m:'Acrylic on canvas',s:'90 × 120 cm',r:1.25,k:'sun',c:['#2a2f5b','#f2a65a','#e4572e','#1b1f3b'],d:'A low sun holds still over a field gone blue. Okafor painted it from memory of a long train ride, keeping only the colour of the light and leaving out every detail.'},
+{id:'echo-rings',t:'Echo Rings',a:'Jonas Lindqvist',y:2024,m:'Digital print',s:'60 × 60 cm',r:1,k:'rings',c:['#f3efe6','#1f3a93','#e8453c','#f5b82e'],d:'Concentric rings drift off centre, each one a half-step behind the last. A study of how the eye keeps looking for a middle that is not there.'},
+{id:'slow-tide',t:'Slow Tide',a:'Aiko Tanaka',y:2022,m:'Gouache on paper',s:'40 × 56 cm',r:1.4,k:'waves',c:['#0f2a3d','#2f6f8f','#7fb8c4','#e9d9a6'],d:'Four bands of water, each moving at its own speed. Tanaka worked the layers wet-on-dry so the edges stay soft where they meet.'},
+{id:'arches-for-ana',t:'Arches for Ana',a:'Luis Barrera',y:2021,m:'Oil on linen',s:'70 × 55 cm',r:0.8,k:'arch',c:['#e9e4dc','#c4452d','#2e5e4e','#1c1c24'],d:'Three doorways with nothing behind them. Barrera made this for his sister’s first apartment, and it hung in the hallway before it ever reached a gallery.'},
+{id:'diagonal-hours',t:'Diagonal Hours',a:'Priya Nair',y:2024,m:'Screenprint',s:'50 × 70 cm',r:1.3,k:'stripes',c:['#16181f','#f06449','#ede6d6','#36a2a0'],d:'Bands slice the page at a steady angle, like shadows moving across a floor. Printed in four runs with hand-mixed inks.'},
+{id:'quiet-blocks',t:'Quiet Blocks',a:'Henrik Voss',y:2020,m:'Collage on board',s:'45 × 45 cm',r:1,k:'blocks',c:['#e6e1d5','#355c7d','#c06c84','#f8b195'],d:'Cut paper arranged until nothing argued with anything else. Voss calls it his “office window” piece for the grid it never quite completes.'},
+{id:'north-window',t:'North Window',a:'Sofia Marchetti',y:2023,m:'Digital painting',s:'3000 × 4000 px',r:1.33,k:'blocks',c:['#1d2b3a','#9bc1bc','#ed6a5a','#f4f1bb'],d:'A window at night, reduced to three lit panes. Marchetti built it from a single brush and a very small palette.'},
+{id:'second-sunrise',t:'Second Sunrise',a:'Kofi Mensah',y:2022,m:'Acrylic on canvas',s:'80 × 100 cm',r:1.25,k:'sun',c:['#f6d6a8','#d1495b','#edae49','#00798c'],d:'The same sun as the evening paintings, but the sea has turned warm. Mensah painted the pair side by side to show how one shape changes with the hour.'}
+];
+const $=s=>document.querySelector(s);
+function art(a){const h=100*a.r,[b,x,y,z]=a.c;let g='';
+if(a.k==='sun')g=`<circle cx="50" cy="${h*.42}" r="28" fill="${x}"/><rect y="${h*.6}" width="100" height="${h*.4}" fill="${z}"/><rect y="${h*.6}" width="100" height="5" fill="${y}"/>`;
+if(a.k==='rings')g=[40,30,19,8].map((r,i)=>`<circle cx="${50-i*4}" cy="${h/2+i*2}" r="${r}" fill="${[x,y,z,x][i]}"/>`).join('');
+if(a.k==='stripes')g=`<g transform="rotate(-24 50 ${h/2})">`+[0,1,2,3,4,5,6].map(i=>`<rect x="${-30+i*20}" y="-40" width="${i%2?6:12}" height="${h*2}" fill="${[x,y,z][i%3]}"/>`).join('')+`</g>`;
+if(a.k==='blocks')g=`<rect x="10" y="${h*.1}" width="48" height="${h*.45}" fill="${x}"/><rect x="40" y="${h*.35}" width="48" height="${h*.3}" fill="${y}" opacity=".92"/><rect x="18" y="${h*.62}" width="30" height="${h*.26}" fill="${z}"/><circle cx="74" cy="${h*.2}" r="9" fill="${z}"/>`;
+if(a.k==='waves')g=[0,1,2,3].map(i=>{const v=h*(.28+i*.17);return `<path d="M0 ${v}Q25 ${v-14} 50 ${v}T100 ${v}V${h}H0Z" fill="${[x,y,z,'#fff'][i]}" opacity="${i==3?.0:1}"/>`}).join('')+`<circle cx="76" cy="${h*.16}" r="7" fill="${z}"/>`;
+if(a.k==='arch')g=[[8,.3],[36,.42],[64,.3]].map(([ax,t],i)=>{const w=28,top=h*t+w/2;return `<path d="M${ax} ${h}V${top}A${w/2} ${w/2} 0 0 1 ${ax+w} ${top}V${h}Z" fill="${[x,y,z][i]}"/>`}).join('');
+return `<svg viewBox="0 0 100 ${h}" role="img" aria-label="${a.t} by ${a.a}"><rect width="100" height="${h}" fill="${b}"/>${g}</svg>`}
+function gallery(){return `<div class="wrap"><div class="intro"><h1>Now showing</h1><p>${A.length} works from emerging artists. Hover or focus a piece to see who made it.</p></div>
+<div class="grid">${A.map(a=>`<a class="card" href="#art-${a.id}" aria-label="${a.t} by ${a.a}">${art(a)}<div class="cap"><b>${a.t}</b><span>${a.a}, ${a.y}</span></div></a>`).join('')}</div></div>`}
+function detail(id){const i=A.findIndex(a=>a.id===id);if(i<0)return gallery();const a=A[i],p=A[(i+A.length-1)%A.length],n=A[(i+1)%A.length];
+return `<div class="wrap"><div class="crumb"><a href="#gallery">← Back to gallery</a><span><a href="#art-${p.id}">Previous</a> &nbsp;·&nbsp; <a href="#art-${n.id}">Next</a></span></div>
+<div class="detail"><div class="mat">${art(a)}</div><div class="info"><h1>${a.t}</h1><div class="by">${a.a}, ${a.y}</div><p>${a.d}</p>
+<dl><dt>Medium</dt><dd>${a.m}</dd><dt>Size</dt><dd>${a.s}</dd><dt>Year</dt><dd>${a.y}</dd></dl>
+<div class="btns"><a class="btn p" href="#gallery">View more works</a><a class="btn" href="#submit">Submit your own</a></div></div></div></div>`}
+function submit(){return `<div class="wrap"><div class="formgrid"><div><h1>Submit your artwork</h1><p>Share one piece for review. We reply within two weeks and show selected works in the gallery.</p></div>
+<div id="fw"><form id="sf" novalidate>
+<div class="f w"><label for="t">Artwork title</label><input id="t" required><span class="err" id="e-t"></span></div>
+<div class="f"><label for="n">Your name</label><input id="n" required autocomplete="name"><span class="err" id="e-n"></span></div>
+<div class="f"><label for="m">Email</label><input id="m" type="email" required autocomplete="email"><span class="err" id="e-m"></span></div>
+<div class="f"><label for="md">Medium</label><select id="md"><option>Painting</option><option>Print</option><option>Digital</option><option>Photography</option><option>Mixed media</option></select></div>
+<div class="f"><label for="sz">Size</label><input id="sz" placeholder="e.g. 60 × 80 cm"></div>
+<div class="f w"><label for="d">About the work</label><textarea id="d" maxlength="500"></textarea><span class="hint">Up to 500 characters.</span></div>
+<div class="f w"><label for="fi">Image file</label><label class="drop" id="dz" for="fi"><span id="fn">Drop an image here or click to choose (JPG or PNG, up to 10 MB)</span><input id="fi" type="file" accept="image/jpeg,image/png"></label><span class="err" id="e-f"></span></div>
+<div class="f w"><button class="btn p" type="submit">Send for review</button></div></form></div></div></div>`}
+function bindForm(){const fi=$('#fi'),dz=$('#dz');
+fi.onchange=()=>{const f=fi.files[0];$('#fn').textContent=f?f.name:'Drop an image here or click to choose (JPG or PNG, up to 10 MB)'};
+['dragenter','dragover'].forEach(e=>dz.addEventListener(e,v=>{v.preventDefault();dz.classList.add('on')}));
+['dragleave','drop'].forEach(e=>dz.addEventListener(e,()=>dz.classList.remove('on')));
+$('#sf').onsubmit=e=>{e.preventDefault();let bad=0;const set=(k,m)=>{$('#e-'+k).textContent=m;if(m)bad++};
+set('t',$('#t').value.trim()?'':'Enter a title for your artwork.');
+set('n',$('#n').value.trim()?'':'Enter your name.');
+set('m',/^\S+@\S+\.\S+$/.test($('#m').value)?'':'Enter an email like name@example.com.');
+const f=fi.files[0];set('f',!f?'Choose an image of your artwork.':f.size>10485760?'This file is over 10 MB. Choose a smaller one.':'');
+if(bad)return;$('#fw').innerHTML=`<div class="ok"><h2>Submitted</h2><p>Thank you, ${$('#n').value.trim()}. We will email ${$('#m').value} about “${$('#t').value.trim()}”.</p><a class="btn" href="#gallery">Back to gallery</a></div>`}}
+function route(){const h=location.hash.slice(1)||'gallery';let v;
+if(h==='submit'){$('#app').innerHTML=submit();bindForm()}
+else if(h.startsWith('art-'))$('#app').innerHTML=detail(h.slice(4));
+else $('#app').innerHTML=gallery();
+const s=h==='submit';$('#n-s').toggleAttribute('aria-current',s);$('#n-g').toggleAttribute('aria-current',!s);
+scrollTo(0,0)}
+addEventListener('hashchange',route);route();
+</script>
+</body>
+</html>
